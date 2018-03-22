@@ -1,6 +1,8 @@
+package main.java;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,16 +16,14 @@ public class AnalyzeText {
     }
 
     //метод получает файл по пути, все строки содержимого файла помещает в List
-    void getFileWithText() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Enter path to the file. File should be .txt & UTF-8");
+    void getFileWithText(BufferedReader reader) {
+        System.out.println("Enter the path to the file to get word rating. File should be .txt & UTF-8");
         try {
             Path path = Paths.get(reader.readLine());
             fileStringList = Files.readAllLines(path);
         } catch (IOException e) {
             System.out.println("File not found or can't read file");
         }
-        reader.close();
     }
 
     //метод удаляет все символы кроме русских и латинских букв, приводит их к нижнему регистру
@@ -54,9 +54,9 @@ public class AnalyzeText {
 
     //слова, которые необходимо исключить из статистики, внесены в отдельный файл.
     //удаляет из HashMap все словаЮ которые есть в файле
-    void deleteExcludedWords(HashMap<String, Integer> map) throws IOException {
+    void deleteExcludedWords(HashMap<String, Integer> map) throws IOException, URISyntaxException {
 
-        Path path = Paths.get(String.valueOf("C:\\Valeria\\Workspace\\Idea\\TextAnalyzer.git\\src\\excluded_words.txt"));
+        Path path = Paths.get(getClass().getResource("excluded_words.txt").toURI());
         List<String> list = Files.readAllLines(path);
 
         for (String s : list) {

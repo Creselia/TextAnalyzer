@@ -1,6 +1,7 @@
+package main.java;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,36 +17,34 @@ public class CheckBrackets {
     }
 
     //метод получает файл по пути, все строки содержимого файла помещает в List
-    void getFileWithBrackets() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Enter path to the file. File should be .txt & UTF-8");
+    void getFileWithBrackets(BufferedReader reader) {
+        System.out.println("Enter the path to the file to check brackets. File should be .txt & UTF-8");
         try {
             Path path = Paths.get(reader.readLine());
             filledList = Files.readAllLines(path);
         } catch (IOException e) {
             System.out.println("File not found or can't read file");
         }
-        reader.close();
     }
 
-/*
-    private void deleteExceptBrackets(List<String> list, List<String> newList) {
+    //метод "чистит" list от всех символов и пробелов, кроме скобок
+    void deleteExceptBrackets(List<String> list, List<String> newList) {
         for (String s : list) {
-            //newList.add(s.replaceAll("[^(){}[]]", "")); //проблема с регулярным выражением
+            newList.add(s.replaceAll("[^(){}\\[\\]]", "").replaceAll(" ", ""));
         }
     }
-*/
 
     //стэк для хранения открытых скобок
     private Stack<Character> stack = new Stack<>();
 
-
+    //проверяет символ открытой скобки
     private boolean isBracketOpen(char bracket) {
-        return "({[".indexOf(bracket) != -1;
+        return '(' == bracket || '{' == bracket || '[' == bracket;
     }
 
+    //проверяет символ закрытой скобки
     private boolean isBracketClose(char bracket) {
-        return ")}]".indexOf(bracket) != -1;
+        return ')' == bracket || '}' == bracket || ']' == bracket;
     }
 
     //проверяет на соответствие пар скобок
@@ -63,13 +62,11 @@ public class CheckBrackets {
     boolean CheckPairOfBrackets(List<String> list) {
         for (String s : list) {
             for (char c : s.toCharArray()) {
-                if (isBracketOpen(c)){
+                if (isBracketOpen(c)) {
                     stack.push(c);
-                }
-                if (isBracketClose(c) && stack.isEmpty()) {
+                } else if (isBracketClose(c) && stack.isEmpty()) {
                     return false;
-                }
-                if (isBracketClose(c)) {
+                } else if (isBracketClose(c)) {
                     if (areBracketsPaired(stack.peek(), c)) {
                         stack.pop();
                     } else
