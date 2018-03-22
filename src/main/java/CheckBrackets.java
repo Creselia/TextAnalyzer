@@ -1,23 +1,20 @@
-package main.java;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class CheckBrackets {
-
     private List<String> filledList;
 
-    public List<String> getFilledList() {
-        return filledList;
-    }
 
     //метод получает файл по пути, все строки содержимого файла помещает в List
-    void getFileWithBrackets(BufferedReader reader) {
+    private void getFileWithBrackets(BufferedReader reader) {
         System.out.println("Enter the path to the file to check brackets. File should be .txt & UTF-8");
         try {
             Path path = Paths.get(reader.readLine());
@@ -28,7 +25,7 @@ public class CheckBrackets {
     }
 
     //метод "чистит" list от всех символов и пробелов, кроме скобок
-    void deleteExceptBrackets(List<String> list, List<String> newList) {
+    private void deleteExceptBrackets(List<String> list, List<String> newList) {
         for (String s : list) {
             newList.add(s.replaceAll("[^(){}\\[\\]]", "").replaceAll(" ", ""));
         }
@@ -59,7 +56,7 @@ public class CheckBrackets {
     //если скобка закрыта и стэк пуст - не верно
     //если скобка закрыта, то берет последнюю скобку из стэка и проверяет на соответствие пары
     //если пара есть, то удаляет из стэка и продожнает, а если не соответствует - не верно
-    boolean CheckPairOfBrackets(List<String> list) {
+    private boolean CheckPairOfBrackets(List<String> list) {
         for (String s : list) {
             for (char c : s.toCharArray()) {
                 if (isBracketOpen(c)) {
@@ -75,5 +72,13 @@ public class CheckBrackets {
             }
         }
         return stack.isEmpty();
+    }
+
+    void printBracketResult(BufferedReader reader) {
+        List<String> list = new ArrayList<>();
+        getFileWithBrackets(reader);
+        deleteExceptBrackets(filledList, list);
+        boolean isCorrect = CheckPairOfBrackets(list);
+        System.out.println("Brackets are " + (isCorrect ? "" : "not ") + "correct.");
     }
 }
