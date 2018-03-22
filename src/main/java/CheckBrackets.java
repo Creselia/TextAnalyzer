@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,7 +9,6 @@ import java.util.Stack;
 
 public class CheckBrackets {
     private List<String> filledList;
-
 
     //метод получает файл по пути, все строки содержимого файла помещает в List
     private void getFileWithBrackets(BufferedReader reader) {
