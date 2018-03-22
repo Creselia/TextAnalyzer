@@ -8,9 +8,15 @@ import java.util.List;
 import java.util.Stack;
 
 public class CheckBrackets {
-    List<String> filledList;
 
-    void getFileWithText() throws IOException {
+    private List<String> filledList;
+
+    public List<String> getFilledList() {
+        return filledList;
+    }
+
+    //метод получает файл по пути, все строки содержимого файла помещает в List
+    void getFileWithBrackets() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Enter path to the file. File should be .txt & UTF-8");
         try {
@@ -22,13 +28,15 @@ public class CheckBrackets {
         reader.close();
     }
 
+/*
     private void deleteExceptBrackets(List<String> list, List<String> newList) {
         for (String s : list) {
             //newList.add(s.replaceAll("[^(){}[]]", "")); //проблема с регулярным выражением
         }
     }
+*/
 
-
+    //стэк для хранения открытых скобок
     private Stack<Character> stack = new Stack<>();
 
 
@@ -40,12 +48,18 @@ public class CheckBrackets {
         return ")}]".indexOf(bracket) != -1;
     }
 
+    //проверяет на соответствие пар скобок
     private boolean areBracketsPaired(char open, char close) {
         return open == '(' && close == ')' ||
                 open == '{' && close == '}' ||
                 open == '[' && close == ']';
     }
 
+    //метод получает каждую стороку List, из строки делает массив символов
+    //каждый символ массива проверяет, если это открытая скобка, то помещает ее в стэк
+    //если скобка закрыта и стэк пуст - не верно
+    //если скобка закрыта, то берет последнюю скобку из стэка и проверяет на соответствие пары
+    //если пара есть, то удаляет из стэка и продожнает, а если не соответствует - не верно
     boolean CheckPairOfBrackets(List<String> list) {
         for (String s : list) {
             for (char c : s.toCharArray()) {
